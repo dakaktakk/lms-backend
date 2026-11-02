@@ -1,0 +1,16 @@
+spring:
+  application:
+    name: learning-management-system
+  datasource:
+    url: jdbc:postgresql://localhost:5432/lms_db
+    username: postgres
+    password: postgres
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+  doc:
+    api-docs:
+      path: /v3/api-docs
+    swagger-ui:
+      path: /swagger-ui.html
