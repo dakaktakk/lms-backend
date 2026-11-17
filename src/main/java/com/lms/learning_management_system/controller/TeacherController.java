@@ -16,7 +16,7 @@ import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.NO_CONTENT;
 
 @RestController
-@RequestMapping("/api/teachers")
+@RequestMapping("/api/v1/teachers")
 @RequiredArgsConstructor
 @Tag(name = "Teachers", description = "Управление преподавателями")
 public class TeacherController {

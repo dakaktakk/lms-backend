@@ -16,7 +16,8 @@ import java.util.Set;
 @AllArgsConstructor
 @Table(name = "students")
 public class Student {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String firstName;
     private String lastName;

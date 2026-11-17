@@ -16,7 +16,7 @@ import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.NO_CONTENT;
 
 @RestController
-@RequestMapping("/api/schedules")
+@RequestMapping("/api/v1/schedules")
 @RequiredArgsConstructor
 @Tag(name = "Schedules", description = "Управление расписанием")
 public class ScheduleController {
