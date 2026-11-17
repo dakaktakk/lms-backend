@@ -4,8 +4,8 @@ import com.lms.learning_management_system.domain.dto.TeacherCreateDto;
 import com.lms.learning_management_system.domain.dto.TeacherDto;
 import com.lms.learning_management_system.domain.dto.TeacherUpdateDto;
 import com.lms.learning_management_system.domain.entity.Teacher;
+import com.lms.learning_management_system.exception.TeacherNotFoundException;
 import com.lms.learning_management_system.domain.mapper.TeacherMapper;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -32,14 +32,14 @@ public class TeacherService {
     @Transactional(readOnly = true)
     public TeacherDto getById(Long id) {
         Teacher teacher = teacherRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Преподаватель не найден: " + id));
+                .orElseThrow(() -> new TeacherNotFoundException(id));
         return teacherMapper.toDto(teacher);
     }
 
     @Transactional
     public TeacherDto update(Long id, TeacherUpdateDto request) {
         Teacher teacher = teacherRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Преподаватель не найден: " + id));
+                .orElseThrow(() -> new TeacherNotFoundException(id));
         teacherMapper.updateEntityFromDto(request, teacher);
         return teacherMapper.toDto(teacher);
     }
@@ -47,7 +47,7 @@ public class TeacherService {
     @Transactional
     public void delete(Long id) {
         if (!teacherRepository.existsById(id)) {
-            throw new EntityNotFoundException("Преподаватель не найден: " + id);
+            throw new TeacherNotFoundException(id);
         }
         teacherRepository.deleteById(id);
     }
