@@ -18,7 +18,7 @@ public class ScheduleCleanupTask {
 
     private final ScheduleRepository scheduleRepository;
 
-    @Scheduled(cron = "0 0 3 * * ?")
+    @Scheduled(cron = "${app.cleanup.schedule-cron}")
     @Transactional
     public void cleanUpOldSchedules() {
 

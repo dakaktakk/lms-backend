@@ -32,6 +32,7 @@ public class GroupService {
         return groupRepository.findAll(pageable).map(groupMapper::toDto);
     }
 
+    @Transactional(readOnly = true)
     public GroupDto getById(Long id) {
 
         Group group = groupRepository.findById(id)
