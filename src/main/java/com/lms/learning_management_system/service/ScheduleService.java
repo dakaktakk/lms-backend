@@ -78,7 +78,7 @@ public class ScheduleService {
 
         scheduleMapper.updateEntityFromDto(request, schedule);
 
-        return scheduleMapper.toDto(scheduleRepository.save(schedule));
+        return scheduleMapper.toDto(schedule);
     }
 
     @Transactional
