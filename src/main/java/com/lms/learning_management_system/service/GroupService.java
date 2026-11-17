@@ -6,7 +6,8 @@ import com.lms.learning_management_system.domain.dto.GroupUpdateDto;
 import com.lms.learning_management_system.domain.entity.Group;
 import com.lms.learning_management_system.domain.entity.Student;
 import com.lms.learning_management_system.domain.mapper.GroupMapper;
-import jakarta.persistence.EntityNotFoundException;
+import com.lms.learning_management_system.exception.GroupNotFoundException;
+import com.lms.learning_management_system.exception.StudentNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -36,7 +37,7 @@ public class GroupService {
     public GroupDto getById(Long id) {
 
         Group group = groupRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Группа не найдена: " + id));
+                .orElseThrow(() -> new GroupNotFoundException(id));
         return groupMapper.toDto(group);
     }
 
@@ -44,7 +45,7 @@ public class GroupService {
     public GroupDto update(Long id, GroupUpdateDto request) {
 
         Group group = groupRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Группа не найдена: " + id));
+                .orElseThrow(() -> new GroupNotFoundException(id));
         groupMapper.updateEntityFromDto(request, group);
         return groupMapper.toDto(group);
     }
@@ -53,7 +54,7 @@ public class GroupService {
     public void delete(Long id) {
 
         if (!groupRepository.existsById(id)) {
-            throw new EntityNotFoundException("Группа не найдена: " + id);
+            throw new GroupNotFoundException(id);
         }
         groupRepository.deleteById(id);
     }
@@ -62,10 +63,10 @@ public class GroupService {
     public GroupDto addStudent(Long groupId, Long studentId) {
 
         Group group = groupRepository.findById(groupId)
-                .orElseThrow(() -> new EntityNotFoundException("Группа не найдена: " + groupId));
+                .orElseThrow(() -> new GroupNotFoundException(groupId));
 
         Student student = studentRepository.findById(studentId)
-                .orElseThrow(() -> new EntityNotFoundException("Студент не найден: " + studentId));
+                .orElseThrow(() -> new StudentNotFoundException(studentId));
 
         group.getStudents().add(student);
         student.getGroups().add(group);
@@ -77,10 +78,10 @@ public class GroupService {
     public GroupDto removeStudent(Long groupId, Long studentId) {
 
         Group group = groupRepository.findById(groupId)
-                .orElseThrow(() -> new EntityNotFoundException("Группа не найдена: " + groupId));
+                .orElseThrow(() -> new GroupNotFoundException(groupId));
 
         Student student = studentRepository.findById(studentId)
-                .orElseThrow(() -> new EntityNotFoundException("Студент не найден: " + studentId));
+                .orElseThrow(() -> new StudentNotFoundException(studentId));
 
         group.getStudents().remove(student);
         student.getGroups().remove(group);

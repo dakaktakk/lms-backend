@@ -6,7 +6,8 @@ import com.lms.learning_management_system.domain.dto.StudentUpdateDto;
 import com.lms.learning_management_system.domain.entity.Group;
 import com.lms.learning_management_system.domain.entity.Student;
 import com.lms.learning_management_system.domain.mapper.StudentMapper;
-import jakarta.persistence.EntityNotFoundException;
+import com.lms.learning_management_system.exception.ResourceNotFoundException;
+import com.lms.learning_management_system.exception.StudentNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -28,9 +29,9 @@ public class StudentService {
     @Transactional
     public StudentDto create(StudentCreateDto request) {
 
-        Set<Group> groups = new HashSet<>(groupRepository.findAllById(request.getGroupIds()));
-        if (groups.size() != request.getGroupIds().size()) {
-            throw new EntityNotFoundException("Одна или несколько групп не найдены");
+        Set<Group> groups = new HashSet<>(groupRepository.findAllById(request.groupIds()));
+        if (groups.size() != request.groupIds().size()) {
+            throw new ResourceNotFoundException("Одна или несколько групп не найдены");
         }
 
         Student student = studentMapper.toEntity(request, groups);
@@ -46,7 +47,7 @@ public class StudentService {
     @Transactional(readOnly = true)
     public StudentDto getById(Long id) {
         Student student = studentRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Студент не найден: " + id));
+                .orElseThrow(() -> new StudentNotFoundException(id));
         return studentMapper.toDto(student);
     }
 
@@ -54,11 +55,11 @@ public class StudentService {
     public StudentDto update(Long id, StudentUpdateDto dto) {
 
         Student student = studentRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Студент не найден: " + id));
+                .orElseThrow(() -> new StudentNotFoundException(id));
 
-        Set<Group> groups = new HashSet<>(groupRepository.findAllById(dto.getGroupIds()));
-        if (groups.size() != dto.getGroupIds().size()) {
-            throw new EntityNotFoundException("Одна или несколько групп не найдены");
+        Set<Group> groups = new HashSet<>(groupRepository.findAllById(dto.groupIds()));
+        if (groups.size() != dto.groupIds().size()) {
+            throw new ResourceNotFoundException("Одна или несколько групп не найдены");
         }
 
         studentMapper.update(dto, groups, student);
@@ -69,7 +70,7 @@ public class StudentService {
     @Transactional
     public void delete(Long id) {
         if (!studentRepository.existsById(id)) {
-            throw new EntityNotFoundException("Студент не найден: " + id);
+            throw new StudentNotFoundException(id);
         }
         studentRepository.deleteById(id);
     }
