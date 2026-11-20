@@ -115,8 +115,8 @@ class StudentIntegrationTest {
         }
 
         @Test
-        @DisplayName("Должен вернуть 500 при пустом имени")
-        void shouldReturn500WhenNameIsEmpty() {
+        @DisplayName("Должен вернуть 400 при пустом имени")
+        void shouldReturn400WhenNameIsEmpty() {
             StudentCreateDto request = new StudentCreateDto(
                     "",
                     "Иванов",
@@ -125,7 +125,7 @@ class StudentIntegrationTest {
 
             ResponseEntity<String> response = testRestTemplate.postForEntity(baseUrl, request, String.class);
 
-            assertEquals(INTERNAL_SERVER_ERROR, response.getStatusCode());
+            assertEquals(BAD_REQUEST, response.getStatusCode());
         }
     }
 

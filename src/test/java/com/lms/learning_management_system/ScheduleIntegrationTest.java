@@ -149,7 +149,7 @@ class ScheduleIntegrationTest {
             ResponseEntity<String> response = testRestTemplate
                     .postForEntity(baseUrl, invalidRequest, String.class);
 
-            assertEquals(INTERNAL_SERVER_ERROR, response.getStatusCode());
+            assertEquals(BAD_REQUEST, response.getStatusCode());
         }
     }
 

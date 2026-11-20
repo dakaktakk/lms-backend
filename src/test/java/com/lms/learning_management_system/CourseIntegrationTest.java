@@ -95,13 +95,13 @@ class CourseIntegrationTest {
         }
 
         @Test
-        @DisplayName("Должен вернуть 500 при пустом названии")
-        void shouldReturn500WhenNameIsEmpty() {
+        @DisplayName("Должен вернуть 400 при пустом названии")
+        void shouldReturn400WhenNameIsEmpty() {
             CourseCreateDto request = new CourseCreateDto("", "Некорректное описание");
 
             ResponseEntity<String> response = testRestTemplate.postForEntity(baseUrl, request, String.class);
 
-            assertEquals(INTERNAL_SERVER_ERROR, response.getStatusCode());
+            assertEquals(BAD_REQUEST, response.getStatusCode());
         }
     }
 
