@@ -44,7 +44,8 @@ public class ScheduleService {
                 .orElseThrow(() -> new CourseNotFoundException(request.courseId()));
 
         Schedule schedule = scheduleMapper.toEntity(request, group, teacher, course);
-        return scheduleMapper.toDto(schedule);
+
+        return scheduleMapper.toDto(scheduleRepository.save(schedule));
     }
 
     @Transactional(readOnly = true)

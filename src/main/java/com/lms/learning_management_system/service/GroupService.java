@@ -7,6 +7,7 @@ import com.lms.learning_management_system.domain.entity.Group;
 import com.lms.learning_management_system.domain.entity.Student;
 import com.lms.learning_management_system.domain.mapper.GroupMapper;
 import com.lms.learning_management_system.exception.GroupNotFoundException;
+import com.lms.learning_management_system.exception.ResourceNotFoundException;
 import com.lms.learning_management_system.exception.StudentNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -56,6 +57,7 @@ public class GroupService {
         if (!groupRepository.existsById(id)) {
             throw new GroupNotFoundException(id);
         }
+
         groupRepository.deleteById(id);
     }
 
@@ -67,6 +69,10 @@ public class GroupService {
 
         Student student = studentRepository.findById(studentId)
                 .orElseThrow(() -> new StudentNotFoundException(studentId));
+
+        if (group.getStudents().stream().anyMatch(s -> s.getId().equals(studentId))) {
+            throw new ResourceNotFoundException("Студент уже состоит в этой группе");
+        }
 
         group.getStudents().add(student);
         student.getGroups().add(group);
@@ -80,11 +86,14 @@ public class GroupService {
         Group group = groupRepository.findById(groupId)
                 .orElseThrow(() -> new GroupNotFoundException(groupId));
 
-        Student student = studentRepository.findById(studentId)
-                .orElseThrow(() -> new StudentNotFoundException(studentId));
+        if (!studentRepository.existsById(studentId)) {
+            throw new StudentNotFoundException(studentId);
+        }
 
-        group.getStudents().remove(student);
-        student.getGroups().remove(group);
+        boolean removed = group.getStudents().removeIf(s -> s.getId().equals(studentId));
+        if (!removed) {
+            throw new ResourceNotFoundException("Студент не состоит в этой группе");
+        }
 
         return groupMapper.toDto(group);
     }

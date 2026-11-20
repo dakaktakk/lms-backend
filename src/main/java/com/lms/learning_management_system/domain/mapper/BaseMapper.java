@@ -18,7 +18,7 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
  * <pre>{@code
  * @Mapper(componentModel = "spring")
  * public interface CourseMapper extends BaseMapper<Course, CourseDto, CourseCreateDto, CourseUpdateDto> {
- *     // кастомные маппинги
+ *
  * }
  * }</pre>
  */

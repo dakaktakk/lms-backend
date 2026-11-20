@@ -36,7 +36,9 @@ public class StudentService {
 
         Student student = studentMapper.toEntity(request, groups);
 
-        return studentMapper.toDto(student);
+        Student savedStudent = studentRepository.save(student);
+
+        return studentMapper.toDto(savedStudent);
     }
 
     @Transactional(readOnly = true)
@@ -63,6 +65,7 @@ public class StudentService {
         }
 
         studentMapper.update(dto, groups, student);
+        studentRepository.save(student);
 
         return studentMapper.toDto(student);
     }
