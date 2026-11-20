@@ -1,0 +1,10 @@
+spring:
+  datasource:
+    # Важно: префикс jdbc:tc: говорит Testcontainers автоматически поднять контейнер
+    url: jdbc:tc:postgresql:15-alpine:///lms_test
+    username: postgres
+    password: postgres
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: false
